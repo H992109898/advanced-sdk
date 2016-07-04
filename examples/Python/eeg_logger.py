@@ -13,12 +13,17 @@ from ctypes import c_double
 from ctypes import byref
 
 try :
-    if sys.platform.startswith('win32'):     
-        libEDK = cdll.LoadLibrary("edk.dll")
-    if sys.platform.startswith('linux'):
-        srcDir = os.getcwd()    
-        libPath = srcDir + "/libedk.so"        
+    if sys.platform.startswith('win32'):
+        libEDK = cdll.LoadLibrary("../../bin/win32/edk.dll")
+    elif sys.platform.startswith('linux'):
+        srcDir = os.getcwd()
+	if platform.machine().startswith('arm'):
+            libPath = srcDir + "/../../bin/armhf/libedk.so"
+	else:
+            libPath = srcDir + "/../../bin/linux64/libedk.so"
         libEDK = CDLL(libPath)
+    else:
+        raise Exception('System not supported.')
 except :
     print 'Error : cannot load dll lib' 
     
