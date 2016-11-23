@@ -48,7 +48,7 @@ const char header[] = "COUNTER, INTERPOLATED, RAW_CQ, AF3,"
 bool IsHeadset1On  = false;
 bool IsHeadset2On  = false;
 bool onetime       = true;
-int  write         =  0;
+int  writeId         =  0;
 double* data1[100]     ;
 double* data2[100]     ;
 
@@ -173,7 +173,7 @@ int main(int argc,char** argv[])
 					{
 						IsHeadset1On = true;
                         if( onetime) {
-                            write = userID;
+                            writeId = userID;
                             onetime = false;
                         }
                         for (int c = 0 ;
@@ -195,7 +195,7 @@ int main(int argc,char** argv[])
 					{
 						IsHeadset2On = true;
                         if( onetime) {
-                            write = userID;
+                            writeId = userID;
                             onetime = false;
                         }
                         for (int c = 0 ;

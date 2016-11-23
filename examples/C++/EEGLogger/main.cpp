@@ -40,7 +40,7 @@ int _getch(void);
 
 int main() 
 {
-	IEE_DataChannel_t EpocChannelList[] = {
+    IEE_DataChannel_t EpocChannelList[] = {
 
 		IED_COUNTER, IED_INTERPOLATED,
 		IED_AF3, IED_F7, IED_F3, IED_FC5, IED_T7,
@@ -109,13 +109,13 @@ int main()
 			}
 
 			if (readytocollect) {
-				IEE_DataUpdateHandle(0, hData);
+                IEE_DataUpdateHandle(0, hData);
 				unsigned int nSamplesTaken = 0;
-				IEE_DataGetNumberOfSample(hData, &nSamplesTaken);
+				IEE_DataGetNumberOfSample(hData, &nSamplesTaken);				
 				
-				std::cout << "Updated " << nSamplesTaken << std::endl;
-				
-				if (nSamplesTaken != 0) {
+                if (nSamplesTaken != 0) {
+                    time_t now = time(nullptr)%86400;
+                    std::cout << now/3600<<":" << (now%3600)/60 << ":" << now%60 << " UTC, Updated " << nSamplesTaken << std::endl;
 					double* data = new double[nSamplesTaken];
 					for (int sampleIdx = 0; sampleIdx < (int)nSamplesTaken; ++sampleIdx) {
 						for (int i = 0; i < sizeof(EpocChannelList) / sizeof(IEE_DataChannel_t); i++) {

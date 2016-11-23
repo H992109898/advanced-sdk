@@ -4,9 +4,6 @@
 # It is recommended not to modify this file, since newer versions of Qt Creator
 # may offer an updated version of it.
 
-EXAMPLES_ROOT=$${PWD}/../../..
-INCLUDEPATH += $${EXAMPLES_ROOT}/include
-
 defineTest(qtcAddDeployment) {
 for(deploymentfolder, DEPLOYMENTFOLDERS) {
     item = item$${deploymentfolder}
@@ -194,10 +191,8 @@ export (QMAKE_EXTRA_TARGETS)
 
 }
 
-
-
-
-#LIBS += -L$${EXAMPLES_ROOT}/bin -L$${EXAMPLES_ROOT}/lib
+EXAMPLES_ROOT=$${PWD}/../../..
+INCLUDEPATH += $${EXAMPLES_ROOT}/include
 
 CONFIG(release, debug|release) {
     TARGET_POSTFIX =
@@ -228,18 +223,41 @@ win32 {
     LIBS += -ledk
 }else:ios {
 }else:macx{
+    LIBS += -framework edk
 }else:unix{
+    QMAKE_CFLAGS   +=-g
+    QMAKE_CXXFLAGS +=-g
+    QMAKE_LFLAGS   +=-g
+    QMAKE_CXXFLAGS +=-std=c++1y
+    QMAKE_LFLAGS   +=-std=c++1y
+
+    DESTDIR=/tmp/emotiv/build/bin/linux
+
+    contains(QT_ARCH,arm){
+        ARCH_EXT="arm"
+        LIBS+=-L$${EXAMPLES_ROOT}/bin/armhf
+    }
+
     contains(QT_ARCH,i386) {
-        #ARCH_EXT="x86_32"
         ARCH_EXT="32"
-        LIBS+=-L$${EXAMPLES_ROOT}/bin/linux32
-        LIBS+= -L/home/emotiv/working/win/build/bin/linux32 # Development PC
+        LIBS+=-L$${EXAMPLES_ROOT}/bin/linux32        
     }
     contains(QT_ARCH,x86_64) {
         ARCH_EXT="64"
-        LIBS+=-L$${EXAMPLES_ROOT}/bin/linux64
-        LIBS+= -L/home/emotiv/working/win/build/bin/linux64 # Development PC
+        LIBS+=-L$${EXAMPLES_ROOT}/bin/linux64 # EDK library path
     }
-    LIBS += -ledk
-    DESTDIR=/tmp/emotiv/build/bin/linux
+
+    CONFIG(debug, debug|release){
+        TARGET_POSTFIX = _debug
+        CONFIG -= release
+        LIBS += -ledk
+    }
+
+    CONFIG(release, debug|release){
+        LIBS += -ledk
+    }
+
 }
+
+
+
