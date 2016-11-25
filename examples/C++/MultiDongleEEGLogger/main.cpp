@@ -164,6 +164,10 @@ int main(int argc,char** argv[])
 			if (readytocollect && (state==EDK_OK)) 
 			{		
 				int check = IEE_DataUpdateHandle(userID, eData);
+                if (check != EDK_OK) {
+                    std::cout << "Get EEG data error code: " << check << std::endl;
+                    throw std::runtime_error("EEG data error!");
+                }
 				unsigned int nSamplesTaken=0;
 				IEE_DataGetNumberOfSample(eData,&nSamplesTaken);
 
